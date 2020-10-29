@@ -18,6 +18,10 @@ To begin, you'll need to install `lit-style-loader`:
 npm install --save-dev lit-style-loader
 ```
 
+```console
+yarn add --dev lit-style-loader
+```
+
 It's recommended to combine `lit-style-loader` with the [`css-loader`](https://github.com/webpack-contrib/css-loader)
 
 Then add the loader to your `webpack` config. For example:
