@@ -51,7 +51,11 @@ export function update(css, list) {
     const newItem = newList.find((c) => c.id === result.id);
     result.cssText = newItem.cssText;
     if (result._styleSheet && supportsAdoptingStyleSheets) {
-      result._styleSheet.replaceSync(newItem.cssText);
+      try {
+        result._styleSheet.replaceSync(newItem.cssText);
+      } catch {
+        // ignore css error on replacing
+      }
     }
   }
   return true;

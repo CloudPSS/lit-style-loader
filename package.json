@@ -1,6 +1,6 @@
 {
   "name": "lit-style-loader",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "In place replacement for style-loader, that exports array of lit-element CSSResult",
   "main": "index.js",
   "author": "CloudPSS",
