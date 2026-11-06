@@ -1,6 +1,6 @@
-"use strict";
+import { unsafeCSS, supportsAdoptingStyleSheets } from "lit";
 
-import { unsafeCSS, CSSResult, supportsAdoptingStyleSheets } from "lit-element";
+/** @typedef {import("lit").CSSResult} CSSResult */
 
 /**
  * @param {[string, string, string, string]} item
@@ -41,22 +41,17 @@ export function load(list) {
 export function update(css, list) {
   list = list || [];
   if (css.length !== list.length) return false;
-  if (css.length !== list.length) return false;
   if (!supportsAdoptingStyleSheets) return false;
-  if (list.some(([id]) => !css.find((c) => c.id === id))) return false;
-  if (css.some(({ id }) => !list.find(([lid]) => id === lid)))
-    return load(list);
+  if (list.some(([id], index) => css[index].id !== id)) return false;
   const newList = load(list);
-  for (const result of css) {
-    const newItem = newList.find((c) => c.id === result.id);
-    result.cssText = newItem.cssText;
-    if (result._styleSheet && supportsAdoptingStyleSheets) {
-      try {
-        result._styleSheet.replaceSync(newItem.cssText);
-      } catch {
-        // ignore css error on replacing
-      }
+  for (const [index, result] of css.entries()) {
+    const newItem = newList[index];
+    try {
+      result.styleSheet.replaceSync(newItem.cssText);
+    } catch {
+      return false;
     }
+    result.cssText = newItem.cssText;
   }
   return true;
 }

@@ -8,7 +8,7 @@
 
 # lit-style-loader
 
-Exports CSS as `CSSResult[]` for `lit-element`.
+Exports CSS as `CSSResult[]` for Lit 2 and 3. Requires Node.js 20.11+ (20.x) or 22+, and webpack 5.27+.
 
 ## Getting Started
 
@@ -38,6 +38,7 @@ Then add the loader to your `webpack` config. For example:
 
 ```js
 import styles from "./style.css?lit";
+import { LitElement } from "lit";
 
 export default class extends LitElement {
   static get styles() {

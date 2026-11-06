@@ -1,24 +1,24 @@
-"use strict";
-
-const path = require("path");
-const loaderUtils = require("loader-utils");
+import { resolve } from "node:path";
 
 const loaderApi = () => {};
 
-loaderApi.pitch = function loader(request) {
-  const lib = loaderUtils.stringifyRequest(
-    this,
-    path.resolve(__dirname, "stylesToCssArray.js")
+export function pitch(request) {
+  const context = this.context || this.rootContext;
+  const lib = JSON.stringify(
+    this.utils.contextify(
+      context,
+      resolve(import.meta.dirname, "stylesToCssArray.js"),
+    ),
   );
-  const source = loaderUtils.stringifyRequest(this, `!!${request}`);
+  const source = JSON.stringify(this.utils.contextify(context, `!!${request}`));
   if (this.hot) {
     return `
 import { load, update } from ${lib};
 import content from ${source};
 
-let result = load(content);
-if (module.hot) {
-    module.hot.accept(${source}, function () {
+const result = load(content);
+if (import.meta.webpackHot) {
+    import.meta.webpackHot.accept(${source}, function () {
         const updated = update(result, content);
         if (!updated) throw new Error("Can't hmr");
     });
@@ -30,6 +30,6 @@ import { load } from ${lib};
 import content from ${source};
 export default load(content);`;
   }
-};
+}
 
-module.exports = loaderApi;
+export default loaderApi;
